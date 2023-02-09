@@ -17,7 +17,7 @@ FROM alpine/socat:latest as SOCATSOURCE
 FROM alpine:3.17.1
 LABEL maintainer="litong01"
 
-RUN apk add --update bash docker-cli openssl xxd dos2unix jq
+RUN apk add --update bash docker-cli git openssl xxd dos2unix jq
 
 COPY --from=BUILDER /work/bin/* /home/bin/
 COPY ./main.sh /home/bin
