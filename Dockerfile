@@ -12,22 +12,24 @@ RUN apk add curl && mkdir -p /work/bin && cd /work && \
     tar -xf helm.tar.gz && mv linux-${ARCH}/helm /work/bin/helm
 
 FROM email4tong/kind:v0.17.1 as KINDSOURCE
-FROM alpine/socat:latest as SOCATSOURCE
 
 FROM alpine:3.17.1
 LABEL maintainer="litong01"
 
-RUN apk add --update bash docker-cli git make openssl xxd dos2unix jq
+ENV PYTHONUNBUFFERED=1
+RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
+RUN python3 -m ensurepip
+RUN pip3 install --no-cache --upgrade pip setuptools requests
+RUN apk add --update bash docker-cli git make curl rsync \
+    openssl xxd dos2unix jq
 
 COPY --from=BUILDER /work/bin/* /home/bin/
 COPY ./main.sh /home/bin
 COPY --from=KINDSOURCE /usr/local/bin/kind /home/bin
-COPY --from=SOCATSOURCE /usr/bin/socat /usr/bin/socat
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/* && apk update
 
 ENV PATH $PATH:/home/bin
 ENV HOME=/home
-ENV DOCKER_HOST=tcp://localhost:2375
 
 WORKDIR /home
 CMD /home/bin/main.sh
