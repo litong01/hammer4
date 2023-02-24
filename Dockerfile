@@ -21,7 +21,7 @@ RUN apk add --update --no-cache python3 && ln -sf python3 /usr/bin/python
 RUN python3 -m ensurepip
 RUN pip3 install --no-cache --upgrade pip setuptools requests
 RUN apk add --update bash docker-cli git make curl rsync \
-    openssl diffutils jq perl
+    openssl diffutils jq yq perl
 
 COPY --from=BUILDER /work/bin/* /home/bin/
 COPY ./main.sh /home/bin
