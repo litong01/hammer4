@@ -28,10 +28,17 @@ COPY --from=BUILDER /root/go/bin/setup-envtest /home/bin
 COPY ./main.sh /home/bin
 COPY --from=KINDSOURCE /usr/local/bin/kind /home/bin
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/* && apk update
-RUN /home/bin/setup-envtest use 1.26.0 --bin-dir /home/bin -p path
+RUN apath=$(/home/bin/setup-envtest use 1.26.0 --bin-dir /home/bin -p path) && \
+    mv ${apath}/kube-apiserver /home/bin/k8s/ && \
+    mv ${apath}/etcd /home/bin/k8s/ && \
+    mv ${apath}/kubectl /home/bin/k8s/ && rm -rf ${apath}
 
 ENV PATH $PATH:/home/bin
 ENV HOME=/home
+ENV KUBEBUILDER_ASSETS /home/bin/k8s
+ENV TEST_ASSET_KUBE_APISERVER /home/bin/k8s/kube-apiserver
+ENV TEST_ASSET_ETCD /home/bin/k8s/etcd
+ENV TEST_ASSET_KUBECTL /home/bin/k8s/kubectl
 
 WORKDIR /home
 CMD /home/bin/main.sh
