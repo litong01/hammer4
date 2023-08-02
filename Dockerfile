@@ -12,6 +12,7 @@ RUN apk add curl && mkdir -p /work/bin && cd /work && \
     tar -xf kustomize.tar.gz && mv kustomize /work/bin/kustomize
 RUN apk add --update --no-cache go
 RUN go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.11.1
+RUN go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
 
 FROM email4tong/kind:v0.17.1 as KINDSOURCE
 
@@ -23,9 +24,11 @@ RUN apk add --update --no-cache bash docker-cli git make openssl \
 
 COPY --from=BUILDER /work/bin/* /home/bin/
 COPY --from=BUILDER /root/go/bin/controller-gen /home/bin
+COPY --from=BUILDER /root/go/bin/setup-envtest /home/bin
 COPY ./main.sh /home/bin
 COPY --from=KINDSOURCE /usr/local/bin/kind /home/bin
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/* && apk update
+RUN /home/bin/setup-envtest use 1.26.0 --bin-dir /home/bin -p path
 
 ENV PATH $PATH:/home/bin
 ENV HOME=/home
