@@ -1,4 +1,4 @@
-FROM --platform=${BUILDPLATFORM} alpine:3.18.2 as BUILDER
+FROM alpine:3.18.2 as BUILDER
 
 RUN apk add curl && mkdir -p /work/bin && cd /work && \
     ARCH=$(uname -m) && if [[ "${ARCH}" == "aarch64" ]]; then ARCH=arm64; fi && \
