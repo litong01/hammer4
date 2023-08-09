@@ -9,7 +9,12 @@ RUN apk add curl && mkdir -p /work/bin && cd /work && \
     echo "Downloading kustomize 3.8.7 ..." && \
     curl -Lso kustomize.tar.gz https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v3.8.7/kustomize_v3.8.7_linux_${ARCH}.tar.gz && \
     echo "Expand kustomize 3.8.7 ..." && \
-    tar -xf kustomize.tar.gz && mv kustomize /work/bin/kustomize
+    tar -xf kustomize.tar.gz && mv kustomize /work/bin/kustomize && \
+    echo "Download helm..." && \
+    curl -Lso helm.tar.gz https://get.helm.sh/helm-v3.11.0-linux-${ARCH}.tar.gz && \
+    echo "Expand helm..." && \
+    tar -xf helm.tar.gz && mv linux-${ARCH}/helm /work/bin/helm
+
 RUN apk add --update --no-cache go
 RUN go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.11.1
 RUN go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
