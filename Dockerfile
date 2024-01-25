@@ -28,7 +28,7 @@ FROM alpine:3.18.2
 LABEL maintainer="litong01"
 
 RUN apk add --update --no-cache bash docker-cli git make openssl \
-    diffutils jq yq go docker-cli-buildx
+    diffutils jq yq go docker-cli-buildx k9s
 
 COPY --from=BUILDER /work/bin/* /home/bin/
 COPY --from=BUILDER /root/go/bin/controller-gen /home/bin
