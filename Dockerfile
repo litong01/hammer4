@@ -22,7 +22,7 @@ RUN apk add --update --no-cache go
 RUN go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.11.1
 RUN go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
 
-FROM email4tong/kind:v0.17.1 as KINDSOURCE
+FROM email4tong/kind:v0.20.1 as KINDSOURCE
 
 FROM alpine:3.18.2
 LABEL maintainer="litong01"
