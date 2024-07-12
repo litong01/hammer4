@@ -13,9 +13,15 @@ RUN apk add curl && mkdir -p /work/bin && cd /work && \
     echo "Download helm..." && \
     curl -Lso helm.tar.gz https://get.helm.sh/helm-v3.15.2-linux-${ARCH}.tar.gz && \
     echo "Expand helm..." && \
-    tar -xf helm.tar.gz && mv linux-${ARCH}/helm /work/bin/helm
+    tar -xf helm.tar.gz && mv linux-${ARCH}/helm /work/bin/helm && \
+    echo "Download istioctl..." && \
+    curl -Lso istioctl.tar.gz https://github.com/istio/istio/releases/download/1.22.2/istio-1.22.2-linux-${ARCH}.tar.gz && \
+    echo "Expand istioctl..." && \
+    tar -xf istioctl.tar.gz && \
+    echo "Move istioctl..." && \
+    mv istio-1.22.2/bin/istioctl /work/bin/istioctl
 
-RUN apk add --update --no-cache go=1.22.4-r0
+RUN apk add --update --no-cache go=1.22.5-r0
 RUN go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.15.0
 RUN go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
 
