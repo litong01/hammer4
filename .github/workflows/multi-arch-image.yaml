@@ -14,7 +14,7 @@ env:
   IMAGE_NAME: hammer4
   IMAGE_TAG: v0.1.0
   IMAGE_REGISTRY: docker.io
-  IMAGE_NAMESPACE: email4tong
+  IMAGE_NAMESPACE: tli551
 
 jobs:
   build:
