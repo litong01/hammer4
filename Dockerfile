@@ -1,4 +1,4 @@
-FROM alpine:3.20.3 as BUILDER
+FROM alpine:3.18.9 as BUILDER
 
 RUN apk add curl && mkdir -p /work/bin && cd /work && \
     ARCH=$(uname -m) && if [[ "${ARCH}" == "aarch64" ]]; then ARCH=arm64; fi && \
@@ -11,11 +11,11 @@ RUN apk add curl && mkdir -p /work/bin && cd /work && \
     echo "Expand helm..." && \
     tar -xf helm.tar.gz && mv linux-${ARCH}/helm /work/bin/helm
 
-FROM alpine:3.20.3
+FROM alpine:3.18.9
 LABEL maintainer="litong01"
 
 RUN apk add --update --no-cache bash docker-cli \
-    jq yq docker-cli-buildx curl go
+    jq docker-cli-buildx curl go
 
 COPY --from=BUILDER /work/bin/* /home/bin/
 COPY ./main.sh /home/bin
