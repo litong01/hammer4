@@ -1,4 +1,4 @@
-FROM alpine:3.20.3 as BUILDER
+FROM alpine:3.21.3 as BUILDER
 
 RUN apk add curl && mkdir -p /work/bin && cd /work && \
     ARCH=$(uname -m) && if [[ "${ARCH}" == "aarch64" ]]; then ARCH=arm64; fi && \
@@ -7,7 +7,7 @@ RUN apk add curl && mkdir -p /work/bin && cd /work && \
     curl -Lso kubectl "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${ARCH}/kubectl" && \
     chmod +x kubectl && mv kubectl /work/bin/kubectl
 
-FROM alpine:3.20.3
+FROM alpine:3.21.3
 LABEL maintainer="litong01"
 
 RUN apk add --update --no-cache bash docker-cli \
